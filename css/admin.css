@@ -1,0 +1,124 @@
+:root {
+  --vert-fonce: #1e3d2b;
+  --vert-clair: #2e5a3f;
+  --creme: #f5f0e2;
+  --creme-fonce: #ece3cd;
+  --dore: #c9a05c;
+  --danger: #b33a3a;
+  --ok: #3a7d44;
+  --radius: 12px;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: #eef1ea;
+  color: #222;
+}
+
+/* ---- Login ---- */
+#login-screen {
+  min-height: 100vh; display: flex; align-items: center; justify-content: center;
+  background: var(--vert-fonce);
+}
+.login-box {
+  background: white; padding: 30px 26px; border-radius: 16px; width: 100%; max-width: 340px;
+  text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+}
+.login-box h1 { color: var(--vert-fonce); margin-top: 0; font-family: Georgia, serif; }
+.login-box input {
+  width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ccc; border-radius: 8px;
+}
+.login-box button {
+  width: 100%; padding: 11px; background: var(--vert-fonce); color: var(--creme);
+  border: none; border-radius: 8px; font-weight: 700; cursor: pointer; margin-top: 6px;
+}
+.login-error { color: var(--danger); font-size: 0.82rem; min-height: 18px; }
+.login-hint { font-size: 0.75rem; color: #888; margin: 6px 0 0; }
+.login-reset-link { display: inline-block; margin-top: 10px; font-size: 0.78rem; color: var(--vert-clair); }
+
+/* ---- Layout admin ---- */
+#admin-app { display: none; min-height: 100vh; }
+#admin-app.open { display: flex; }
+
+.admin-sidebar {
+  width: 210px; background: var(--vert-fonce); color: var(--creme);
+  padding: 18px 12px; flex-shrink: 0;
+}
+.admin-sidebar h2 { font-family: Georgia, serif; color: var(--dore); font-size: 1.15rem; margin-top: 0; }
+.admin-sidebar nav button {
+  display: block; width: 100%; text-align: left; background: none; border: none;
+  color: var(--creme-fonce); padding: 10px 8px; border-radius: 8px; cursor: pointer; font-size: 0.9rem; margin-bottom: 4px;
+}
+.admin-sidebar nav button.active, .admin-sidebar nav button:hover { background: var(--vert-clair); color: white; }
+.admin-sidebar .logout { margin-top: 20px; opacity: 0.85; border-top: 1px solid rgba(255,255,255,0.2); padding-top: 14px; }
+
+.admin-main { flex: 1; padding: 22px; overflow-x: auto; }
+.admin-main h2 { color: var(--vert-fonce); font-family: Georgia, serif; }
+
+.admin-topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
+
+.btn {
+  padding: 9px 16px; border-radius: 8px; border: none; cursor: pointer; font-weight: 600; font-size: 0.85rem;
+}
+.btn-primary { background: var(--vert-fonce); color: var(--creme); }
+.btn-gold { background: var(--dore); color: var(--vert-fonce); }
+.btn-danger { background: var(--danger); color: white; }
+.btn-outline { background: white; border: 1px solid var(--vert-fonce); color: var(--vert-fonce); }
+.btn-small { padding: 5px 10px; font-size: 0.75rem; }
+
+table { width: 100%; border-collapse: collapse; background: white; border-radius: var(--radius); overflow: hidden; }
+th, td { padding: 10px 12px; text-align: left; font-size: 0.85rem; border-bottom: 1px solid #eee; }
+th { background: var(--creme-fonce); color: var(--vert-fonce); }
+tr:hover td { background: #fafaf5; }
+
+.badge { padding: 3px 9px; border-radius: 999px; font-size: 0.72rem; font-weight: 700; }
+.badge-attente { background: #fdf1d0; color: #b8860b; }
+.badge-approuve { background: #d6f5db; color: var(--ok); }
+.badge-refuse { background: #fadada; color: var(--danger); }
+.badge-confirmee { background: #d9ecff; color: #1a5fa8; }
+.badge-en_livraison { background: #e3d9ff; color: #5b34a8; }
+.badge-livree { background: #d6f5db; color: var(--ok); }
+.badge-annulee { background: #fadada; color: var(--danger); }
+.badge-en_attente { background: #fdf1d0; color: #b8860b; }
+
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 100; padding: 16px; }
+.modal-overlay.open { display: flex; }
+.modal-box { background: white; border-radius: 14px; padding: 22px; max-width: 440px; width: 100%; max-height: 88vh; overflow-y: auto; }
+.modal-box h3 { color: var(--vert-fonce); margin-top: 0; }
+.modal-close { float: right; background: none; border: none; font-size: 1.3rem; cursor: pointer; }
+.form-field { margin-bottom: 12px; }
+.form-field label { display: block; font-size: 0.82rem; font-weight: 700; color: var(--vert-fonce); margin-bottom: 4px; }
+.form-field input, .form-field select, .form-field textarea { width: 100%; padding: 8px 10px; border: 1px solid #ccc; border-radius: 8px; }
+
+.stat-cards { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 20px; }
+.stat-card { background: white; border-radius: var(--radius); padding: 16px 20px; min-width: 140px; box-shadow: 0 3px 10px rgba(0,0,0,0.06); }
+.stat-card .num { font-size: 1.6rem; font-weight: 800; color: var(--vert-fonce); }
+.stat-card .lbl { font-size: 0.78rem; color: #666; }
+
+.sync-box { background: white; padding: 16px; border-radius: var(--radius); margin-top: 16px; }
+.sync-box code { background: var(--creme-fonce); padding: 2px 6px; border-radius: 4px; }
+
+.sync-badge {
+  display: inline-block; font-size: 0.78rem; font-weight: 600;
+  padding: 7px 14px; border-radius: 999px; margin-bottom: 16px;
+}
+.sync-badge.sync-ok { background: #d6f5db; color: var(--ok); }
+.sync-badge.sync-busy { background: #fdf1d0; color: #b8860b; }
+.sync-badge.sync-error { background: #fadada; color: var(--danger); }
+.sync-badge.sync-off { background: #eee; color: #888; }
+
+.toast {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--vert-fonce); color: var(--creme); padding: 10px 18px; border-radius: 999px;
+  font-size: 0.85rem; z-index: 200; opacity: 0; transition: opacity 0.3s; pointer-events: none;
+}
+.toast.show { opacity: 1; }
+
+@media (max-width: 720px) {
+  #admin-app.open { flex-direction: column; }
+  .admin-sidebar { width: 100%; display: flex; align-items: center; gap: 8px; overflow-x: auto; padding: 10px; }
+  .admin-sidebar h2 { display: none; }
+  .admin-sidebar nav { display: flex; gap: 6px; }
+  .admin-sidebar .logout { margin: 0; border: none; padding: 0; }
+}

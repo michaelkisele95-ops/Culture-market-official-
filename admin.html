@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="robots" content="noindex, nofollow" />
+<title>Culture — Espace Admin</title>
+<link rel="icon" href="icons/icon-192.png" />
+<link rel="stylesheet" href="css/admin.css" />
+</head>
+<body>
+
+<!-- ÉCRAN DE CONNEXION -->
+<div id="login-screen">
+  <div class="login-box">
+    <h1>🔐 Culture Admin</h1>
+    <p style="font-size:0.85rem;color:#666;">Espace réservé à la gestion de l'entreprise.</p>
+    <input type="password" id="login-password" placeholder="Mot de passe admin" />
+    <button id="btn-login">Se connecter</button>
+    <div class="login-error" id="login-error"></div>
+    <p class="login-hint" id="login-mode-hint"></p>
+    <a href="#" id="link-reset-local" class="login-reset-link">Mot de passe local oublié ?</a>
+  </div>
+</div>
+
+<!-- APPLICATION ADMIN -->
+<div id="admin-app">
+  <aside class="admin-sidebar">
+    <h2>🌿 Culture Admin</h2>
+    <nav>
+      <button data-view="dashboard" class="active">📊 Tableau de bord</button>
+      <button data-view="produits">🥦 Produits</button>
+      <button data-view="commandes">🧾 Commandes</button>
+      <button data-view="comptes">👥 Comptes clients</button>
+      <button data-view="livreurs">🚴 Livreurs</button>
+      <button data-view="sync">🔄 Google Sheet</button>
+    </nav>
+    <button class="logout" id="btn-logout">🚪 Déconnexion</button>
+  </aside>
+
+  <main class="admin-main">
+
+    <div id="sync-badge" class="sync-badge sync-off">⚪ Vérification…</div>
+
+    <!-- DASHBOARD -->
+    <div class="view" id="view-dashboard">
+      <h2>Tableau de bord</h2>
+      <div class="stat-cards" id="stat-cards"></div>
+      <div class="admin-topbar"><h3 style="margin:0;">Dernières commandes</h3></div>
+      <table id="table-dashboard-commandes"><thead><tr><th>Réf</th><th>Client</th><th>Total</th><th>Statut</th><th>Date</th></tr></thead><tbody></tbody></table>
+    </div>
+
+    <!-- PRODUITS -->
+    <div class="view" id="view-produits" style="display:none;">
+      <div class="admin-topbar">
+        <h2 style="margin:0;">Produits</h2>
+        <button class="btn btn-primary" id="btn-nouveau-produit">➕ Nouveau produit</button>
+      </div>
+      <table>
+        <thead><tr><th></th><th>Nom</th><th>Prix</th><th>Unité</th><th>Disponible</th><th>Actions</th></tr></thead>
+        <tbody id="table-produits"></tbody>
+      </table>
+    </div>
+
+    <!-- COMMANDES -->
+    <div class="view" id="view-commandes" style="display:none;">
+      <h2>Commandes</h2>
+      <table>
+        <thead><tr><th>Réf</th><th>Client</th><th>Téléphone</th><th>Total</th><th>Statut</th><th>Livreur</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody id="table-commandes"></tbody>
+      </table>
+    </div>
+
+    <!-- COMPTES CLIENTS -->
+    <div class="view" id="view-comptes" style="display:none;">
+      <h2>Comptes clients (abonnements)</h2>
+      <table>
+        <thead><tr><th>Nom</th><th>Téléphone</th><th>Adresse</th><th>Statut</th><th>Date</th><th>Actions</th></tr></thead>
+        <tbody id="table-comptes"></tbody>
+      </table>
+    </div>
+
+    <!-- LIVREURS -->
+    <div class="view" id="view-livreurs" style="display:none;">
+      <div class="admin-topbar">
+        <h2 style="margin:0;">Livreurs</h2>
+        <button class="btn btn-primary" id="btn-nouveau-livreur">➕ Nouveau livreur</button>
+      </div>
+      <table>
+        <thead><tr><th>Nom</th><th>Téléphone</th><th>Actions</th></tr></thead>
+        <tbody id="table-livreurs"></tbody>
+      </table>
+    </div>
+
+    <!-- SYNC GOOGLE SHEET -->
+    <div class="view" id="view-sync" style="display:none;">
+      <h2>Synchronisation Google Sheet</h2>
+      <div class="sync-box">
+        <p>URL configurée : <code id="sync-url">(aucune)</code></p>
+        <p style="font-size:0.82rem;color:#666;">
+          Depuis la mise à jour, la synchronisation est <strong>automatique</strong> : chaque
+          modification (produit, commande, compte, livreur) part toute seule vers le Sheet,
+          et l'admin comme le site client vérifient les changements toutes les 15 à 20 secondes
+          — peu importe le téléphone utilisé. Les boutons ci-dessous ne sont utiles que pour
+          forcer une synchronisation immédiate (ex. juste après avoir modifié le Sheet à la main).
+        </p>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:10px;">
+          <button class="btn btn-gold" id="btn-export-sheet">⬆️ Forcer l'envoi vers le Sheet</button>
+          <button class="btn btn-outline" id="btn-import-sheet">⬇️ Forcer la récupération du Sheet</button>
+        </div>
+        <p id="sync-status" style="margin-top:10px;font-size:0.85rem;"></p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- MODAL PRODUIT -->
+<div class="modal-overlay" id="modal-produit">
+  <div class="modal-box">
+    <button class="modal-close" data-close="#modal-produit">✕</button>
+    <h3 id="modal-produit-titre">Nouveau produit</h3>
+    <input type="hidden" id="prod-id" />
+    <div class="form-field"><label>Nom</label><input type="text" id="prod-nom" /></div>
+    <div class="form-field"><label>Emoji / icône de secours (ex : 🍅)</label><input type="text" id="prod-emoji" /></div>
+    <div class="form-field"><label>Image (chemin ou URL, ex : assets/produits/tomates.jpg)</label><input type="text" id="prod-image" placeholder="Laisser vide pour utiliser l'emoji" /></div>
+    <div class="form-field"><label>Prix (FC)</label><input type="number" id="prod-prix" /></div>
+    <div class="form-field"><label>Unité</label><input type="text" id="prod-unite" placeholder="kg, botte, unité, panier..." /></div>
+    <div class="form-field"><label>Description</label><textarea id="prod-description" rows="2"></textarea></div>
+    <div class="form-field">
+      <label><input type="checkbox" id="prod-dispo" style="width:auto;" checked /> Disponible à la vente</label>
+    </div>
+    <button class="btn btn-primary" id="btn-save-produit">💾 Enregistrer</button>
+  </div>
+</div>
+
+<!-- MODAL LIVREUR -->
+<div class="modal-overlay" id="modal-livreur">
+  <div class="modal-box">
+    <button class="modal-close" data-close="#modal-livreur">✕</button>
+    <h3>Livreur</h3>
+    <input type="hidden" id="liv-id" />
+    <div class="form-field"><label>Nom</label><input type="text" id="liv-nom" /></div>
+    <div class="form-field"><label>Téléphone</label><input type="tel" id="liv-tel" /></div>
+    <button class="btn btn-primary" id="btn-save-livreur">💾 Enregistrer</button>
+  </div>
+</div>
+
+<!-- MODAL ASSIGNER LIVREUR À UNE COMMANDE -->
+<div class="modal-overlay" id="modal-assigner">
+  <div class="modal-box">
+    <button class="modal-close" data-close="#modal-assigner">✕</button>
+    <h3>Assigner un livreur</h3>
+    <input type="hidden" id="assign-commande-id" />
+    <div class="form-field">
+      <label>Livreur</label>
+      <select id="assign-livreur-select"></select>
+    </div>
+    <button class="btn btn-primary" id="btn-confirm-assign">✅ Assigner et passer en livraison</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="js/config.js"></script>
+<script src="js/store.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>
